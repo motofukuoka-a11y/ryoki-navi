@@ -2,7 +2,7 @@ name: Publish Ryoki Navi
 on:
   push:
     branches: [main]
-    paths: [site.zip]
+    paths: ['site-*.zip', site.sha256, .github/workflows/pages.yml]
   workflow_dispatch:
 permissions:
   contents: read
@@ -23,7 +23,7 @@ jobs:
         run: |
           sha256sum --check site.sha256
           mkdir -p public
-          unzip -q site.zip -d public
+          for archive in site-*.zip; do unzip -q "$archive" -d public; done
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v4
         with:
